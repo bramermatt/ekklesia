@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ekklesia - Together for the Word</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-white to-gray-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-20">
+            <!-- Logo & Brand -->
+            <span class="text-2xl font-extrabold tracking-tight">Ekklesia</span>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center space-x-8 text-lg font-medium">
+                <a href="#" class="hover:text-blue-200 transition">Home</a>
+                <a href="#search" class="hover:text-blue-200 transition">Search</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="nav-toggle" class="focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex relative">
+
+        <!-- Sliding Footnotes Sidebar (hidden by default) -->
+        <aside id="footnotesSidebar" class="fixed top-0 right-0 h-full w-80 bg-blue-50 border-l border-blue-100 p-6 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-blue-700">Footnotes & Commentary</h3>
+                <button id="closeSidebar" class="text-blue-700 hover:text-blue-900 text-2xl font-bold focus:outline-none">&times;</button>
+            </div>
+            <div id="footnotes" class="mt-2 text-sm text-gray-600">
+                <!-- Footnotes will dynamically appear here -->
+            </div>
+        </aside>
+
+        <!-- Open Sidebar Button -->
+        <button id="openSidebar" class="fixed bottom-6 right-6 bg-blue-600 text-white rounded-full shadow-lg p-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <svg class="w-6 h-6 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            Footnotes
+        </button>
+
+        <!-- Right Column: Search and Results Section -->
+        <section class="w-full sm:max-w-2xl mx-auto px-3 sm:px-4 py-8 sm:py-12">
+            <div class="bg-white/90 rounded-2xl shadow-2xl p-6 sm:p-10 border border-blue-100">
+                <h2 class="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6 text-blue-700">Search <span class="italic">"Verse in Real Life"</span></h2>
+                
+                <form class="flex flex-col sm:flex-row items-center justify-center gap-2 mb-6 sm:mb-8" onsubmit="event.preventDefault(); searchButton.click();">
+                    <input 
+                        id="query" 
+                        type="text" 
+                        placeholder="e.g. John 3:16 or Psalm 23" 
+                        class="flex-1 w-full p-3 sm:p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-base sm:text-lg shadow-sm transition"
+                        autocomplete="off"
+                    />
+                    <button 
+                        id="searchButton" 
+                        type="button"
+                        class="bg-blue-600 text-white px-5 sm:px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow transition"
+                    >
+                        Search
+                    </button>
+                </form>
+
+                <div id="results" class="mt-4 sm:mt-6 min-h-[80px]">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-200 py-5 sm:py-6 text-center mt-8 sm:mt-12 shadow-inner">
+        <p class="text-xs sm:text-sm">&copy; 2025 <span class="font-semibold">Ekklesia</span>. All rights reserved.</p>
+        <p class="text-xs mt-1">
+            Made by <a href="https://www.mattbramer.com" class="underline hover:text-blue-300" target="_blank" rel="noopener">Matt Bramer</a>
+            &middot;
+            <a href="https://github.com/bramermatt/ekklesia" class="underline hover:text-blue-300" target="_blank" rel="noopener">GitHub Repo</a>
+        </p>
+    </footer>
+
+    <script>
+        // Sidebar open/close logic
+        const openSidebarBtn = document.getElementById('openSidebar');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('footnotesSidebar');
+
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.remove('translate-x-full');
+        });
+
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.add('translate-x-full');
+        });
+
+        // Optional: Close sidebar when clicking outside (on overlay)
+        document.addEventListener('click', (e) => {
+            if (
+                !sidebar.contains(e.target) &&
+                !openSidebarBtn.contains(e.target) &&
+                !sidebar.classList.contains('translate-x-full')
+            ) {
+                sidebar.classList.add('translate-x-full');
+            }
+        });
+
+        // Search function
+        const searchButton = document.getElementById("searchButton");
+        const resultsDiv = document.getElementById("results");
+        const footnotesDiv = document.getElementById("footnotes");
+
+        searchButton.addEventListener("click", async function() {
+            const query = document.getElementById("query").value.trim();
+            if (!query) {
+                resultsDiv.innerHTML = `<p class="text-red-500 text-center">Please enter a search query.</p>`;
+                return;
+            }
+
+            resultsDiv.innerHTML = `<div class="flex justify-center"><svg class="animate-spin h-6 w-6 text-blue-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg><span class="text-gray-600">Searching...</span></div>`;
+
+            try {
+                // ESV API integration
+                const apiKey = "744b4fae1caec8a4d8be46300bcc5ff92ad02a0e"; // Replace with your ESV API key
+                const passage = encodeURIComponent(query);
+                const response = await fetch(
+                    `https://api.esv.org/v3/passage/text/?q=${passage}&include-passage-references=true&include-verse-numbers=true&include-footnotes=true&include-headings=false&include-short-copyright=false`,
+                    {
+                        headers: {
+                            "Authorization": `Token ${apiKey}`
+                        }
+                    }
+                );
+                const data = await response.json();
+
+                if (data.passages && data.passages.length > 0) {
+                    resultsDiv.innerHTML = `
+                        <h3 class="text-xl font-semibold text-blue-700 mb-4 text-center">Search Results</h3>
+                        <ul class="space-y-4">
+                            ${data.passages.map(result => `
+                                <li class="p-5 bg-blue-50 border-l-4 border-blue-400 rounded-lg shadow-sm">
+                                    <p class="text-base text-gray-700 whitespace-pre-line leading-relaxed">${result}</p>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `;
+
+                    // Show footnotes if available from the API
+                    if (data.footnotes && data.footnotes.length > 0) {
+                        footnotesDiv.innerHTML = `
+                            <div class="mb-4">
+                                <p class="text-gray-700 font-semibold">Footnotes:</p>
+                                <ul class="list-decimal list-inside text-gray-600 space-y-2">
+                                    ${data.footnotes.map(fn => `<li>${fn}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        footnotesDiv.innerHTML = `
+                            <div class="mb-4">
+                                <p class="text-gray-700 font-semibold">Footnotes:</p>
+                                <p class="text-gray-600">No footnotes available for this passage.</p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    resultsDiv.innerHTML = `<p class="text-center text-gray-500">No results found for "<span class="font-semibold">${query}</span>". Try a different search.</p>`;
+                }
+            } catch (error) {
+                console.error('Error fetching verses:', error);
+                resultsDiv.innerHTML = `<p class="text-center text-red-500">Sorry, something went wrong. Please try again later.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
